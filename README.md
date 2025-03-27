@@ -2,6 +2,37 @@
 
 EatSmart est une application web moderne pour la gestion complète d'un restaurant, développée avec React, TypeScript, Tailwind CSS et Firebase. Elle permet aux clients de consulter le menu et de passer des commandes, et au personnel du restaurant de gérer les commandes et le menu.
 
+## 🚀 Tuto lancement
+
+Pour lancer le projet en local, suivez ces étapes simples :
+
+### Prérequis
+- Node.js installé sur votre machine (version 14 ou supérieure)
+- npm (gestionnaire de paquets Node.js)
+
+### Étapes de lancement
+1. **Ouvrir un terminal dans le dossier du projet**
+2. **Installer les dépendances** (à faire uniquement la première fois) :
+   ```bash
+   npm install
+   ```
+3. **Lancer le serveur de développement** :
+   ```bash
+   npm run dev
+   ```
+4. **Accéder au site** : Ouvrez votre navigateur et allez à l'adresse http://localhost:5173
+
+### Initialisation des données (première utilisation)
+1. Accédez à la page Admin via http://localhost:5173/admin
+2. Cliquez sur le bouton "Réinitialiser les données" pour charger les données initiales du menu
+
+### Accès aux différentes pages
+- **Accueil** : http://localhost:5173/
+- **Menu** : http://localhost:5173/menu
+- **Commander** : http://localhost:5173/order
+- **Cuisine** : http://localhost:5173/kitchen
+- **Admin** : http://localhost:5173/admin
+
 ## 📋 Fonctionnalités Principales
 
 ### Pour les Clients
