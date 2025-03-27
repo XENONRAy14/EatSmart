@@ -24,14 +24,17 @@ Pour lancer le projet en local, suivez ces étapes simples :
 
 ### Initialisation des données (première utilisation)
 1. Accédez à la page Admin via http://localhost:5173/admin
-2. Cliquez sur le bouton "Réinitialiser les données" pour charger les données initiales du menu
+2. Connectez-vous avec vos identifiants administrateur
+3. Cliquez sur l'onglet "Gestion des Données"
+4. Cliquez sur le bouton "Initialiser les données du menu" pour charger les données initiales du menu
 
 ### Accès aux différentes pages
 - **Accueil** : http://localhost:5173/
 - **Menu** : http://localhost:5173/menu
 - **Commander** : http://localhost:5173/order
 - **Cuisine** : http://localhost:5173/kitchen
-- **Admin** : http://localhost:5173/admin
+- **Admin** : http://localhost:5173/admin (protégé par authentification)
+- **Connexion** : http://localhost:5173/login
 
 ## 📋 Fonctionnalités Principales
 
@@ -48,6 +51,11 @@ Pour lancer le projet en local, suivez ces étapes simples :
   - Annuler des commandes
 
 ### Pour les Administrateurs
+- **Authentification** : Système de connexion sécurisé pour protéger l'accès à l'administration
+- **Tableau de Bord** : Visualisation des statistiques clés (commandes totales, revenus, plats populaires)
+- **Graphiques Analytiques** : 
+  - Répartition des commandes par jour de la semaine
+  - Diagramme des plats les plus populaires
 - **Gestion du Menu** : Ajouter, modifier ou supprimer des plats
 - **Réinitialisation des Données** : Option pour réinitialiser le menu avec des données par défaut
 
@@ -57,12 +65,15 @@ Pour lancer le projet en local, suivez ces étapes simples :
 project/
 ├── src/                    # Code source principal
 │   ├── components/         # Composants réutilisables
+│   │   ├── Dashboard.tsx   # Tableau de bord avec statistiques et graphiques
 │   │   ├── Map.tsx         # Composant de carte pour afficher l'emplacement
-│   │   └── Navbar.tsx      # Barre de navigation
+│   │   ├── Navbar.tsx      # Barre de navigation
+│   │   └── ProtectedRoute.tsx # Composant pour protéger les routes admin
 │   ├── pages/              # Pages principales de l'application
 │   │   ├── Admin.tsx       # Page d'administration
 │   │   ├── Home.tsx        # Page d'accueil
 │   │   ├── Kitchen.tsx     # Tableau de bord de cuisine
+│   │   ├── Login.tsx       # Page de connexion pour les administrateurs
 │   │   ├── Menu.tsx        # Page du menu
 │   │   └── Order.tsx       # Page de commande
 │   ├── App.tsx             # Composant principal et routage
@@ -84,13 +95,23 @@ project/
   - Tailwind CSS
   - React Router pour la navigation
   - Lucide React pour les icônes
+  - Recharts pour les graphiques analytiques
+  - React Hot Toast pour les notifications
 
 - **Backend** :
   - Firebase Firestore pour la base de données
+  - Firebase Authentication pour la sécurité
   - Firebase Functions pour les opérations CRUD
+  - Firebase Hosting pour le déploiement
 
 - **Cartographie** :
   - Leaflet pour l'affichage de la carte interactive
+
+## 🔒 Sécurité
+
+- **Authentification** : Système de connexion basé sur Firebase Authentication
+- **Routes Protégées** : Accès restreint à la page d'administration
+- **Validation des Données** : Vérification des entrées utilisateur pour prévenir les injections
 
 ## 🚀 Fonctionnalités Détaillées
 

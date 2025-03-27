@@ -6,8 +6,11 @@ import Menu from './pages/Menu';
 import Order from './pages/Order';
 import Admin from './pages/Admin';
 import Kitchen from './pages/Kitchen';
+import Login from './pages/Login';
 // Import du composant Navbar
 import Navbar from './components/Navbar';
+// Import du composant ProtectedRoute pour protéger les routes
+import ProtectedRoute from './components/ProtectedRoute';
 // Import du composant Toaster pour les notifications
 import { Toaster } from 'react-hot-toast';
 
@@ -29,7 +32,15 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/menu" element={<Menu />} />
         <Route path="/order" element={<Order />} />
-        <Route path="/admin" element={<Admin />} />
+        <Route path="/login" element={<Login />} />
+        <Route 
+          path="/admin" 
+          element={
+            <ProtectedRoute>
+              <Admin />
+            </ProtectedRoute>
+          } 
+        />
         <Route path="/kitchen" element={<Kitchen />} />
       </Routes>
     </Router>

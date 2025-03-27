@@ -1,7 +1,7 @@
 // Importation des fonctions nécessaires de Firebase
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, where, orderBy, Timestamp, serverTimestamp } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
+import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, where, orderBy, Timestamp, serverTimestamp, writeBatch } from 'firebase/firestore';
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, User } from 'firebase/auth';
 // Import du type MenuItem défini dans types.ts
 import { MenuItem, Order } from './types';
 
@@ -28,6 +28,47 @@ export const auth = getAuth(app);
 const menuCollection = collection(db, 'menu');
 // Référence à la collection "orders" dans Firestore
 const ordersCollection = collection(db, 'orders');
+
+// Fonction pour se connecter avec email et mot de passe
+export const loginWithEmailAndPassword = async (email: string, password: string): Promise<User | null> => {
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    return userCredential.user;
+  } catch (error) {
+    console.error('Erreur de connexion:', error);
+    return null;
+  }
+};
+
+// Fonction pour se déconnecter
+export const logoutUser = async (): Promise<boolean> => {
+  try {
+    await signOut(auth);
+    return true;
+  } catch (error) {
+    console.error('Erreur de déconnexion:', error);
+    return false;
+  }
+};
+
+// Fonction pour vérifier si l'utilisateur est un administrateur
+// Cette fonction vérifie simplement si l'utilisateur est connecté
+// Dans une application réelle, vous pourriez vérifier un rôle spécifique dans une collection "users"
+export const isUserAdmin = (user: User | null): boolean => {
+  // Pour l'instant, nous considérons que tout utilisateur connecté est un administrateur
+  // Vous pourriez améliorer cela en vérifiant une liste d'emails autorisés ou une collection "admins"
+  return !!user;
+};
+
+// Fonction pour obtenir l'utilisateur actuel
+export const getCurrentUser = (): User | null => {
+  return auth.currentUser;
+};
+
+// Fonction pour écouter les changements d'état d'authentification
+export const onAuthStateChange = (callback: (user: User | null) => void): (() => void) => {
+  return onAuthStateChanged(auth, callback);
+};
 
 // Fonction pour récupérer tous les éléments du menu
 // Cette fonction renvoie une promesse qui se résout en un tableau d'objets MenuItem
@@ -254,5 +295,114 @@ export const deleteOrder = async (id: string): Promise<boolean> => {
   } catch (error) {
     console.error(`Error deleting order ${id}:`, error);
     return false; // Échec
+  }
+};
+
+// Fonction pour récupérer toutes les commandes (pour les statistiques)
+export const getAllOrders = async (): Promise<Order[]> => {
+  try {
+    const ordersSnapshot = await getDocs(ordersCollection);
+    return ordersSnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    })) as Order[];
+  } catch (error) {
+    console.error('Error fetching all orders:', error);
+    return [];
+  }
+};
+
+// Fonction pour obtenir le nombre total de commandes
+export const getTotalOrdersCount = async (): Promise<number> => {
+  try {
+    const orders = await getAllOrders();
+    return orders.length;
+  } catch (error) {
+    console.error('Error getting total orders count:', error);
+    return 0;
+  }
+};
+
+// Fonction pour calculer le revenu total
+export const getTotalRevenue = async (): Promise<number> => {
+  try {
+    const orders = await getAllOrders();
+    return orders.reduce((total, order) => total + (order.total || 0), 0);
+  } catch (error) {
+    console.error('Error calculating total revenue:', error);
+    return 0;
+  }
+};
+
+// Fonction pour obtenir les plats les plus populaires
+export const getPopularItems = async (limit: number = 5): Promise<{name: string, count: number}[]> => {
+  try {
+    const orders = await getAllOrders();
+    
+    // Créer un dictionnaire pour compter les occurrences de chaque plat
+    const itemCounts: Record<string, number> = {};
+    
+    // Parcourir toutes les commandes et compter les plats
+    orders.forEach(order => {
+      if (order.items && Array.isArray(order.items)) {
+        order.items.forEach(item => {
+          const itemName = item.name;
+          itemCounts[itemName] = (itemCounts[itemName] || 0) + item.quantity;
+        });
+      }
+    });
+    
+    // Convertir le dictionnaire en tableau et trier par popularité
+    const popularItems = Object.entries(itemCounts)
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, limit);
+    
+    return popularItems;
+  } catch (error) {
+    console.error('Error getting popular items:', error);
+    return [];
+  }
+};
+
+// Fonction pour obtenir les commandes par jour de la semaine
+export const getOrdersByDayOfWeek = async (): Promise<Record<string, number>> => {
+  try {
+    const orders = await getAllOrders();
+    const dayNames = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+    const ordersByDay: Record<string, number> = {
+      'Lundi': 0,
+      'Mardi': 0,
+      'Mercredi': 0,
+      'Jeudi': 0,
+      'Vendredi': 0,
+      'Samedi': 0,
+      'Dimanche': 0
+    };
+    
+    orders.forEach(order => {
+      if (order.timestamp) {
+        // Vérifier si timestamp est un objet Firestore Timestamp ou une Date JavaScript
+        const date = typeof order.timestamp === 'object' && 'toDate' in order.timestamp 
+          ? (order.timestamp as { toDate(): Date }).toDate() 
+          : new Date(order.timestamp);
+        const dayOfWeek = date.getDay(); // 0 = Dimanche, 1 = Lundi, etc.
+        const dayName = dayNames[dayOfWeek];
+        ordersByDay[dayName] = (ordersByDay[dayName] || 0) + 1;
+      }
+    });
+    
+    return ordersByDay;
+  } catch (error) {
+    console.error('Error getting orders by day of week:', error);
+    return {
+      'Lundi': 0,
+      'Mardi': 0,
+      'Mercredi': 0,
+      'Jeudi': 0,
+      'Vendredi': 0,
+      'Samedi': 0,
+      'Dimanche': 0
+    };
   }
 };
