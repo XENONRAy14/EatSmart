@@ -1,5 +1,7 @@
 // Import des hooks nécessaires
 import { useState, useEffect } from 'react';
+// Import du composant Link pour la navigation
+import { Link } from 'react-router-dom';
 // Import des fonctions Firebase
 import { getMenuItems } from '../firebase';
 // Import des types
@@ -184,10 +186,17 @@ const Menu = () => {
                   <p className="mt-2 text-gray-600 text-sm line-clamp-2">{item.description}</p>
                   
                   {/* Indicateur de disponibilité */}
-                  <div className="mt-4">
+                  <div className="mt-4 flex justify-between items-center">
                     <span className={`text-sm ${item.available ? 'text-emerald-600' : 'text-red-600'}`}>
                       {item.available ? 'Disponible' : 'Indisponible'}
                     </span>
+                    <Link 
+                      to={`/menu/${item.id}`} 
+                      className="text-sm text-emerald-600 hover:text-emerald-800"
+                      onClick={(e) => e.stopPropagation()} // Empêche le modal de s'ouvrir lors du clic sur le lien
+                    >
+                      Voir détails &rarr;
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -243,13 +252,21 @@ const Menu = () => {
                 </div>
               </div>
               
-              {/* Bouton de fermeture en bas */}
-              <button 
-                onClick={closeItemDetails}
-                className="mt-6 w-full py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700 transition-colors"
-              >
-                Fermer
-              </button>
+              {/* Boutons d'action */}
+              <div className="mt-6 flex space-x-4">
+                <button 
+                  onClick={closeItemDetails}
+                  className="flex-1 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition-colors"
+                >
+                  Fermer
+                </button>
+                <Link 
+                  to={`/menu/${selectedItem.id}`} 
+                  className="flex-1 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700 transition-colors text-center"
+                >
+                  Voir page détaillée
+                </Link>
+              </div>
             </div>
           </div>
         </div>

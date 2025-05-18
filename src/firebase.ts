@@ -1,6 +1,6 @@
 // Importation des fonctions nécessaires de Firebase
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, where, orderBy, Timestamp, serverTimestamp, writeBatch } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, where, orderBy, Timestamp, serverTimestamp, getDoc } from 'firebase/firestore';
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, User } from 'firebase/auth';
 // Import du type MenuItem défini dans types.ts
 import { MenuItem, Order } from './types';
@@ -87,6 +87,32 @@ export const getMenuItems = async (): Promise<MenuItem[]> => {
     // Gestion des erreurs
     console.error("Error fetching menu items:", error);
     return []; // Retourne un tableau vide en cas d'erreur
+  }
+};
+
+// Fonction pour récupérer un élément du menu par son ID
+// Prend l'ID de l'élément en paramètre et renvoie l'élément correspondant ou null s'il n'existe pas
+export const getMenuItemById = async (id: string): Promise<MenuItem | null> => {
+  try {
+    // Référence au document à récupérer
+    const menuDocRef = doc(db, 'menu', id);
+    // Récupération du document
+    const docSnap = await getDoc(menuDocRef);
+    
+    // Vérification de l'existence du document
+    if (docSnap.exists()) {
+      // Transformation du document Firestore en objet MenuItem
+      return { 
+        id: docSnap.id, 
+        ...docSnap.data() 
+      } as MenuItem;
+    } else {
+      console.log(`Menu item with ID ${id} not found`);
+      return null;
+    }
+  } catch (error) {
+    console.error(`Error fetching menu item ${id}:`, error);
+    return null; // Retourne null en cas d'erreur
   }
 };
 

@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 // Import des pages de l'application
 import Home from './pages/Home';
 import Menu from './pages/Menu';
+import MenuItemDetail from './pages/MenuItemDetail';
 import Order from './pages/Order';
 import Admin from './pages/Admin';
 import Kitchen from './pages/Kitchen';
@@ -31,6 +32,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/menu" element={<Menu />} />
+        <Route path="/menu/:id" element={<MenuItemDetail />} />
         <Route path="/order" element={<Order />} />
         <Route path="/login" element={<Login />} />
         <Route 
