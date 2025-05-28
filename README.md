@@ -36,14 +36,28 @@ Pour lancer le projet en local, suivez ces étapes simples :
    - Mot de passe : admin123
 3. Dans le tableau de bord administrateur, utilisez l'option "Initialiser les données" pour charger les données initiales du menu
 
-### Navigation dans l'application
-- **Accueil** : http://localhost:5173/ - Page d'accueil avec présentation du restaurant
-- **Menu** : http://localhost:5173/menu - Consultation du menu par catégories
-- **Détail d'un plat** : http://localhost:5173/menu/:id - Information détaillée sur un plat
-- **Commander** : http://localhost:5173/order - Passer une commande
-- **Cuisine** : http://localhost:5173/kitchen - Interface pour le personnel de cuisine
-- **Admin** : http://localhost:5173/admin - Tableau de bord administrateur (accès protégé)
-- **Connexion** : http://localhost:5173/login - Page d'authentification
+## 🧭 Guide de Navigation
+
+L'application EatSmart est organisée en plusieurs sections intuitives, chacune conçue pour une expérience utilisateur optimale :
+
+### 🏠 Espace Client
+
+| Section | Description | Fonctionnalités Clés |
+|---------|-------------|-------------------|
+| **Accueil** | Vitrine du restaurant avec ambiance et spécialités | Présentation, Carte interactive, Horaires |
+| **Menu** | Catalogue complet des plats par catégories | Filtrage, Images HD, Prix et descriptions |
+| **Détail Plat** | Fiche complète de chaque spécialité | Ingrédients, Allergies, Options de personnalisation |
+| **Commander** | Processus de commande simplifié | Panier interactif, Calcul automatique, Formulaire client |
+
+### 👨‍🍳 Espace Professionnel
+
+| Section | Accès | Fonctionnalités |
+|---------|-------|---------------|
+| **Cuisine** | Personnel de cuisine | Gestion des commandes en temps réel, Filtres par statut |
+| **Admin** | Administrateurs uniquement | Tableau de bord analytique, Gestion du menu, Statistiques |
+| **Connexion** | Personnel autorisé | Authentification sécurisée via Firebase |
+
+Chaque section est accessible via la barre de navigation intuitive présente sur toutes les pages, permettant une navigation fluide entre les différentes fonctionnalités.
 
 ## 📋 Fonctionnalités Principales
 
