@@ -6,14 +6,14 @@ import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, User 
 import { MenuItem, Order } from './types';
 
 // Configuration de Firebase avec les clés d'API et identifiants de votre projet
-// Ces informations sont générées lorsque vous créez un projet dans la console Firebase
+// Ces informations sont chargées depuis les variables d'environnement pour plus de sécurité
 const firebaseConfig = {
-  apiKey: "AIzaSyDhS27Yv1nlmUn1Tf_0QAzi9Aw0HV8K0x0",
-  authDomain: "eatsmart-8db59.firebaseapp.com",
-  projectId: "eatsmart-8db59",
-  storageBucket: "eatsmart-8db59.firebasestorage.app",
-  messagingSenderId: "397808866164",
-  appId: "1:397808866164:web:40b0a8c156bc2af56e9221"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
 // Initialisation de l'application Firebase
