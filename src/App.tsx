@@ -21,7 +21,8 @@ import Footer from './components/Footer';
  * Définit les routes et la structure générale de l'application
  */
 const App = () => {
-  return (
+  return ( 
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50">
     <Router>
       {/* Système de notifications toast */}
       <Toaster position="top-right" />
@@ -56,6 +57,7 @@ const App = () => {
         <Footer />
       </div>
     </Router>
+    </div>
   );
 };
 

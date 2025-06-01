@@ -3,7 +3,7 @@ import { UtensilsCrossed } from 'lucide-react';
 
 const Navbar = () => {
   return (
-    <div className="navbar bg-base-100 shadow">
+    <div className="navbar bg-white/80 backdrop-blur-sm shadow-sm">
       <div className="navbar-start">
         <Link to="/" className="btn btn-ghost">
           <UtensilsCrossed className="h-6 w-6 text-success" />
